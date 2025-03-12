@@ -1,0 +1,36 @@
+fos_elastica:
+    clients:
+        default: { host: elasticsearch, port: 9200 }
+    indexes:
+        course:
+            persistence:
+                driver: orm
+                model: App\Entity\Course
+                provider: ~
+                finder: ~
+            properties:
+                title:
+                    type: text
+                    analyzer: rebuilt_french
+                category:
+                    type: object
+                    properties:
+                        id: ~
+                        title:
+                            type: text
+                            analyzer: rebuilt_french
+                createdAt:
+                    type: date
+
+            settings:
+                analysis:
+                    tokenizer:
+                        edge_ngram_tokenizer:
+                            type: edge_ngram
+                            min_gram: 2
+                            max_gram: 15
+                            token_chars: [letter, digit]
+                    analyzer:
+                        rebuilt_french:
+                            tokenizer: edge_ngram_tokenizer
+                            filter: [lowercase]

@@ -1,0 +1,24 @@
+parameters:
+
+services:
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        bind:
+            string $fixturesDataSet: '%env(FIXTURES_DATA_SET)%'
+
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+
+
+    App\Controller\SearchController:
+        tags:
+            - controller.service_arguments
+        public: true
+        arguments:
+            - '@knp_paginator'
+            - '@fos_elastica.finder.course'
